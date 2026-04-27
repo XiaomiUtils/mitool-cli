@@ -44,7 +44,6 @@ jobs:
       run: |
         echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
 
-    # --- Conan setup ---
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
@@ -56,27 +55,56 @@ jobs:
     - name: Detect Conan profile
       run: conan profile detect --force
 
-    - name: Override compiler in Conan profile (Linux GCC)
+    - name: Configure Conan profile (Linux GCC)
       if: matrix.c_compiler == 'gcc'
       shell: bash
       run: |
-        PROFILE_PATH=$(conan profile path default)
         GCC_VERSION=$(gcc -dumpversion | cut -d. -f1)
-        sed -i "s/^compiler=.*/compiler=gcc/" "$PROFILE_PATH"
-        sed -i "s/^compiler.version=.*/compiler.version=$GCC_VERSION/" "$PROFILE_PATH"
-        sed -i "s/^compiler.libcxx=.*/compiler.libcxx=libstdc++11/" "$PROFILE_PATH"
-        cat "$PROFILE_PATH" 
+        cat > ~/.conan2/profiles/default << EOF
+        [settings]
+        os=Linux
+        arch=x86_64
+        build_type=${{ matrix.build_type }}
+        compiler=gcc
+        compiler.version=$GCC_VERSION
+        compiler.libcxx=libstdc++11
+        compiler.cppstd=17
+        EOF
+        cat ~/.conan2/profiles/default
 
-    - name: Override compiler in Conan profile (Linux Clang)
+    - name: Configure Conan profile (Linux Clang)
       if: matrix.c_compiler == 'clang'
       shell: bash
       run: |
-        PROFILE_PATH=$(conan profile path default)
         CLANG_VERSION=$(clang --version | grep -oP '\d+' | head -1)
-        sed -i "s/^compiler=.*/compiler=clang/" "$PROFILE_PATH"
-        sed -i "s/^compiler.version=.*/compiler.version=$CLANG_VERSION/" "$PROFILE_PATH"
-        sed -i "s/^compiler.libcxx=.*/compiler.libcxx=libstdc++11/" "$PROFILE_PATH"
-        cat "$PROFILE_PATH"
+        cat > ~/.conan2/profiles/default << EOF
+        [settings]
+        os=Linux
+        arch=x86_64
+        build_type=${{ matrix.build_type }}
+        compiler=clang
+        compiler.version=$CLANG_VERSION
+        compiler.libcxx=libstdc++11
+        compiler.cppstd=17
+        EOF
+        cat ~/.conan2/profiles/default
+
+    - name: Configure Conan profile (Windows MSVC)
+      if: matrix.c_compiler == 'cl'
+      shell: pwsh
+      run: |
+        $profilePath = "$env:USERPROFILE\.conan2\profiles\default"
+        @"
+        [settings]
+        os=Windows
+        arch=x86_64
+        build_type=${{ matrix.build_type }}
+        compiler=msvc
+        compiler.version=194
+        compiler.runtime=dynamic
+        compiler.cppstd=17
+        "@ | Set-Content $profilePath
+        Get-Content $profilePath
 
     - name: Install dependencies via Conan
       run: >
@@ -84,7 +112,6 @@ jobs:
         --output-folder=${{ steps.strings.outputs.build-output-dir }}
         --build=missing
         --settings=build_type=${{ matrix.build_type }}
-    # --- End Conan setup ---
 
     - name: Configure CMake
       run: >
