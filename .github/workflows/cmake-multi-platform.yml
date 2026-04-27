@@ -60,17 +60,23 @@ jobs:
       if: matrix.c_compiler == 'gcc'
       shell: bash
       run: |
-        conan profile update settings.compiler=gcc default
-        conan profile update settings.compiler.version=$(gcc -dumpversion | cut -d. -f1) default
-        conan profile update settings.compiler.libcxx=libstdc++11 default
+        PROFILE_PATH=$(conan profile path default)
+        GCC_VERSION=$(gcc -dumpversion | cut -d. -f1)
+        sed -i "s/^compiler=.*/compiler=gcc/" "$PROFILE_PATH"
+        sed -i "s/^compiler.version=.*/compiler.version=$GCC_VERSION/" "$PROFILE_PATH"
+        sed -i "s/^compiler.libcxx=.*/compiler.libcxx=libstdc++11/" "$PROFILE_PATH"
+        cat "$PROFILE_PATH" 
 
     - name: Override compiler in Conan profile (Linux Clang)
       if: matrix.c_compiler == 'clang'
       shell: bash
       run: |
-        conan profile update settings.compiler=clang default
-        conan profile update settings.compiler.version=$(clang --version | grep -oP '\d+\.\d+' | head -1 | cut -d. -f1) default
-        conan profile update settings.compiler.libcxx=libstdc++11 default
+        PROFILE_PATH=$(conan profile path default)
+        CLANG_VERSION=$(clang --version | grep -oP '\d+' | head -1)
+        sed -i "s/^compiler=.*/compiler=clang/" "$PROFILE_PATH"
+        sed -i "s/^compiler.version=.*/compiler.version=$CLANG_VERSION/" "$PROFILE_PATH"
+        sed -i "s/^compiler.libcxx=.*/compiler.libcxx=libstdc++11/" "$PROFILE_PATH"
+        cat "$PROFILE_PATH"
 
     - name: Install dependencies via Conan
       run: >
