@@ -3,6 +3,7 @@ add_executable(xmota
  )
 
 target_link_libraries(xmota
-  PRIVATE cpr::cpr
+  PRIVATE openssl::openssl
   PRIVATE nlohmann_json::nlohmann_json
+  PRIVATE cpr::cpr
  )

@@ -4,17 +4,16 @@ project(XiaomiOTA
   VERSION 0.0.1
 )
 
-include(cmake/CPM.cmake)
-
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-CPMAddPackage("gh:libcpr/cpr#1.14.2")
-CPMAddPackage("gh:nlohmann/json#v3.12.0")
+find_package(openssl REQUIRED)
+find_package(nlohmann_json REQUIRED)
+find_package(cpr REQUIRED)
 
 add_subdirectory(src)
