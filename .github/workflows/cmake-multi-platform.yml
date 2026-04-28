@@ -52,12 +52,20 @@ jobs:
     - name: Install Conan
       run: pip install conan
 
-    - name: Download conan_provider.cmake
-      shell: bash
+    - name: Download conan_provider.cmake (Linux)
+      if: runner.os == 'Linux'
       run: >
         curl -fsSL
         https://raw.githubusercontent.com/conan-io/cmake-conan/develop2/conan_provider.cmake
         -o ${{ github.workspace }}/conan_provider.cmake
+
+    - name: Download conan_provider.cmake (Windows)
+      if: runner.os == 'Windows'
+      shell: pwsh
+      run: >
+        Invoke-WebRequest
+        -Uri "https://raw.githubusercontent.com/conan-io/cmake-conan/develop2/conan_provider.cmake"
+        -OutFile "${{ github.workspace }}\conan_provider.cmake"
 
     - name: Configure CMake
       run: >
