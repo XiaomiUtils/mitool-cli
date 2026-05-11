@@ -1,9 +1,22 @@
-add_executable(xmota
-  main.cc
- )
+add_library(MiuiUpdate
+  MiuiUpdate/MiuiCrypto.cc
+  MiuiUpdate/MiuiFindUpdate.cc
+  MiuiUpdate/MiuiParseVersion.cc
+)
 
-target_link_libraries(xmota
+add_executable(mitool
+  Main.cc
+)
+
+target_link_libraries(MiuiUpdate
   PRIVATE openssl::openssl
   PRIVATE cpr::cpr
   PRIVATE nlohmann_json::nlohmann_json
+ )
+
+target_link_libraries(mitool
+  PRIVATE nlohmann_json::nlohmann_json
+  PRIVATE fmt::fmt
+  PRIVATE CLI11::CLI11
+  PRIVATE MiuiUpdate
  )
