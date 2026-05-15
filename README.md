@@ -51,12 +51,12 @@ conan profile detect
 conan install . -of=build --build=missing
 
 # Configure and build
-cmake -B build/Release -DCMAKE_BUILD_TYPE=Release \
-      -DCMAKE_TOOLCHAIN_FILE=build/Release/generators/conan_toolchain.cmake
-cmake --build build/Release
+cmake -B build -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_TOOLCHAIN_FILE=build/conan_toolchain.cmake
+cmake --build build
 ```
 
-The binary will be available at `build/Release/mitool`.
+The binary will be available at `build/bin/mitool`.
 
 ## License
 
