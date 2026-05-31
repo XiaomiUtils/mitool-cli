@@ -107,8 +107,8 @@ int main(int argc, char *argv[]) {
                "firmware updates"};
 
   app.add_option("--os-version", osVersion,
-                 "Specify the OS version currently installed on the device");
-  app.add_option("--device", deviceCodename, "Specify the device codename");
+                 "Specify the OS version currently installed on the device")->required();
+  app.add_option("--device", deviceCodename, "Specify the device codename")->required();
   app.add_flag("--no-banner", noBannerFlag, "Disable ASCII startup banner");
 
   CLI11_PARSE(app, argc, argv);
