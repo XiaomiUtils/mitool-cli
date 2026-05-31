@@ -10,7 +10,7 @@ add_executable(mitool
 
 target_link_libraries(MiuiUpdate
   PRIVATE openssl::openssl
-  PRIVATE cpr::cpr
+  PRIVATE CURL::libcurl
   PRIVATE nlohmann_json::nlohmann_json
  )
 

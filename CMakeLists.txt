@@ -14,7 +14,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 find_package(OpenSSL REQUIRED)
 find_package(nlohmann_json REQUIRED)
-find_package(cpr REQUIRED)
+find_package(CURL REQUIRED)
 find_package(fmt REQUIRED)
 find_package(CLI11 REQUIRED)
 
