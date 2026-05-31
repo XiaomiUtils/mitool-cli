@@ -1,9 +1,10 @@
 [requires]
 openssl/3.6.2
 nlohmann_json/3.12.0
-cpr/1.14.2
+libarchive/3.8.7
 fmt/12.1.0
 cli11/2.6.2
+libcurl/8.20.0
 [generators]
 CMakeDeps
 CMakeToolchain
