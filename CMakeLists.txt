@@ -8,6 +8,10 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
+set(CACERT_URL "https://curl.se/ca/cacert.pem")
+set(CACERT_FILE "${CMAKE_BINARY_DIR}/bin/cacert.pem")
+file(DOWNLOAD ${CACERT_URL} ${CACERT_FILE} SHOW_PROGRESS STATUS download_status)
+
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -18,4 +22,5 @@ find_package(CURL REQUIRED)
 find_package(fmt REQUIRED)
 find_package(CLI11 REQUIRED)
 
+add_subdirectory(lib)
 add_subdirectory(src)
