@@ -7,6 +7,7 @@
 
 #include <exception>
 #include <string>
+#include <format>
 
 
 using json = nlohmann::json;
