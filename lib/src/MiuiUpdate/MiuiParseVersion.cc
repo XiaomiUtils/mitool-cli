@@ -1,4 +1,4 @@
-#include "MiuiUpdate.h"
+#include <MiuiUpdate/MiuiUpdate.h>
 
 #include <cstdint>
 #include <cstring>

@@ -1,5 +1,5 @@
 #include "MiuiKeys.h"
-#include "MiuiUpdate.h"
+#include <MiuiUpdate/MiuiUpdate.h>
 
 #include <openssl/aes.h>
 #include <openssl/bio.h>
@@ -7,8 +7,6 @@
 #include <openssl/evp.h>
 
 #include <cstdint>
-#include <iomanip>
-#include <sstream>
 #include <stdexcept>
 #include <string>
 #include <vector>
