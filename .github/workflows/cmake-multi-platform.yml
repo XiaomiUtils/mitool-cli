@@ -20,12 +20,15 @@ jobs:
         include:
           - os: windows-latest
             c_compiler: cl
+            c_bin: cl
             cpp_compiler: cl
           - os: ubuntu-latest
             c_compiler: gcc
-            cpp_compiler: g++
+            c_bin: gcc-14
+            cpp_compiler: g++-14
           - os: ubuntu-latest
             c_compiler: clang
+            c_bin: clang
             cpp_compiler: clang++
         exclude:
           - os: windows-latest
@@ -52,6 +55,22 @@ jobs:
     - name: Install Conan
       run: pip install conan
 
+    - name: Install Ninja (Linux)
+      if: runner.os == 'Linux'
+      run: sudo apt-get update && sudo apt-get install -y ninja-build
+
+    - name: Install Ninja (Windows)
+      if: runner.os == 'Windows'
+      run: choco install ninja -y
+
+    - name: Set up MSVC environment (Windows)
+      if: runner.os == 'Windows'
+      uses: ilammy/msvc-dev-cmd@v1
+
+    - name: Install libc++ (Linux, clang)
+      if: runner.os == 'Linux' && matrix.c_compiler == 'clang'
+      run: sudo apt-get install -y libc++-dev libc++abi-dev
+
     - name: Download conan_provider.cmake (Linux)
       if: runner.os == 'Linux'
       run: >
@@ -70,8 +89,10 @@ jobs:
     - name: Configure CMake
       run: >
         cmake -B ${{ steps.strings.outputs.build-output-dir }}
+        -G Ninja
+        ${{ matrix.c_compiler == 'clang' && '-DCMAKE_CXX_FLAGS=-stdlib=libc++' || '' }}
         -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
-        -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
+        -DCMAKE_C_COMPILER=${{ matrix.c_bin }}
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
         -DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=${{ github.workspace }}/conan_provider.cmake
         -S ${{ github.workspace }}

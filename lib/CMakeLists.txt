@@ -1,30 +1,29 @@
-add_library(MiuiUpdate
-  src/MiuiUpdate/MiuiCrypto.cc
-  src/MiuiUpdate/MiuiFindUpdate.cc
-  src/MiuiUpdate/MiuiParseVersion.cc
+add_library(mitool_lib STATIC)
+
+target_sources(mitool_lib
+  PUBLIC FILE_SET mitool_public_modules TYPE CXX_MODULES
+  FILES
+    mitool/core/error.ixx
+    mitool/core/types.ixx
+
+    mitool/services/firmware_service.ixx
+    mitool/services/install_service.ixx
+
+    mitool/utils/hash_verifier.ixx
+    mitool/utils/version_parser.ixx
+
+  PRIVATE
+    mitool/services/firmware_service.cc
+    mitool/services/install_service.cc
+
+    mitool/utils/hash_verifier.cc
+    mitool/utils/version_parser.cc
 )
 
-add_library(Downloader
-  src/Downloader/Downloader.cc
-  src/Downloader/WriteFunc.cc
-)
-
-target_include_directories(MiuiUpdate
-  PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
-)
-
-target_include_directories(Downloader
-  PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
-)
-
-target_link_libraries(MiuiUpdate
+target_link_libraries(mitool_lib
   PRIVATE openssl::openssl
   PRIVATE CURL::libcurl
   PRIVATE nlohmann_json::nlohmann_json
-)
+  PRIVATE re2::re2)
 
-target_link_libraries(Downloader
-  PRIVATE CURL::libcurl
-)
+target_compile_features(mitool_lib PUBLIC cxx_std_23)
