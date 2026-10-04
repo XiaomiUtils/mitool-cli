@@ -17,7 +17,7 @@ enum class InstallMode {
 
 struct InstallRequest {
   std::filesystem::path firmware_path;
-  std::string expected_md5; // пусто — проверка хеша пропускается
+  std::string expected_md5; // empty — hash check skipped
   InstallMode mode = InstallMode::Auto;
 };
 
