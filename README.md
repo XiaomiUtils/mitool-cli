@@ -20,21 +20,29 @@ A fast, cross-platform CLI utility for searching, downloading, and flashing Xiao
 ## Usage
 
 ```bash
-mitool --os-version <version> --device <codename>
+mitool find --os-version <version> --device <codename> [--download]
+mitool utils --parse-version <version>
+mitool utils --verify-md5 <file> <md5>
+mitool install --file <firmware.zip> [--md5 <md5>] [--mode auto|recovery|fastboot]
 ```
 
 **Example:**
 ```bash
-mitool --os-version OS2.0.5.0.VMUMIXM --device xun
+mitool find --os-version OS2.0.5.0.VMUMIXM --device xun
 ```
 
-## Arguments
+## Commands
 
-| Argument | Type | Description |
-|----------|------|-------------|
-| `--os-version` | parameter | OS version currently installed on the device |
-| `--device` | parameter | Device codename |
-| `--no-banner` | flag | Disable ASCII startup banner |
+| Command | Argument | Description |
+|---------|----------|-------------|
+| `find` | `--os-version` | OS version currently installed on the device |
+| `find` | `--device` | Device codename |
+| `find` | `--download` | Download the found firmware to `rom_downloads/` |
+| `utils` | `--parse-version` | Parse a firmware version string |
+| `utils` | `--verify-md5` | Check a file against an expected MD5 (`<file> <md5>`) |
+| `install` | `--file` | Path to the firmware file |
+| `install` | `--md5` | Expected MD5 of the file (optional) |
+| `install` | `--mode` | `auto` (default), `recovery` or `fastboot` — flashing itself is not implemented yet |
 
 ## Build
 
