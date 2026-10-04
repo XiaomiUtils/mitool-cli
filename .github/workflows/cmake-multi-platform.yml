@@ -59,6 +59,14 @@ jobs:
       if: runner.os == 'Linux'
       run: sudo apt-get update && sudo apt-get install -y ninja-build
 
+    - name: Install Ninja (Windows)
+      if: runner.os == 'Windows'
+      run: choco install ninja -y
+
+    - name: Set up MSVC environment (Windows)
+      if: runner.os == 'Windows'
+      uses: ilammy/msvc-dev-cmd@v1
+
     - name: Install libc++ (Linux, clang)
       if: runner.os == 'Linux' && matrix.c_compiler == 'clang'
       run: sudo apt-get install -y libc++-dev libc++abi-dev
@@ -81,7 +89,7 @@ jobs:
     - name: Configure CMake
       run: >
         cmake -B ${{ steps.strings.outputs.build-output-dir }}
-        ${{ runner.os == 'Linux' && '-G Ninja' || '' }}
+        -G Ninja
         ${{ matrix.c_compiler == 'clang' && '-DCMAKE_CXX_FLAGS=-stdlib=libc++' || '' }}
         -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
         -DCMAKE_C_COMPILER=${{ matrix.c_bin }}
